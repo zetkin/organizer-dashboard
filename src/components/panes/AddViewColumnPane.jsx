@@ -46,9 +46,11 @@ export default class AddViewColumnPane extends PaneBase {
     constructor(props) {
         super(props);
 
+        const shouldShowButton = Boolean(true)
         this.state = {
             type: 'person_field',
             config: Object.assign({}, DEFAULT_CONFIGS.person_field),
+            shouldShowButton: shouldShowButton,
         };
     }
 
@@ -128,17 +130,25 @@ export default class AddViewColumnPane extends PaneBase {
     }
 
     renderPaneFooter(data) {
-        return (
-            <Button
-                labelMsg="panes.addViewColumn.saveButton"
-                onClick={ this.onSubmit.bind(this) }
-                className="AddPersonTagPane-saveButton"/>
-        );
+        if (this.state.shouldShowButton) {
+            return (
+                <Button
+                    labelMsg="panes.addViewColumn.saveButton"
+                    onClick={this.onSubmit.bind(this)}
+                    className="AddPersonTagPane-saveButton"/>
+            );
+        } else {
+            return null;
+        }
     }
 
     onTypeSelect(type) {
         const config = Object.assign({}, DEFAULT_CONFIGS[type]);
-        this.setState({ type, config });
+        if (type === "survey_response") {
+            this.setState({ type, config, shouldShowButton: false});
+        } else {
+            this.setState({ type, config });
+        }
     }
 
     onSubmit(ev) {
@@ -150,7 +160,6 @@ export default class AddViewColumnPane extends PaneBase {
             type: this.state.type,
             config: this.state.config,
         };
-
         this.props.dispatch(createPersonViewColumn(viewId, values));
         this.closePane();
     }
@@ -449,8 +458,7 @@ class AbstractSurveyQuestionColumnTemplate extends React.Component {
                             />
                     );
                 }
-            }
-            else {
+            } else {
                 questionSelect = <LoadingIndicator/>;
             }
         }
@@ -477,14 +485,15 @@ class AbstractSurveyQuestionColumnTemplate extends React.Component {
         const column = {
             config: Object.assign({}, this.props.config, {
                 [attr]: val,
-            })
+            }),
+            shouldShowButton: false,
         };
 
         if (column.config.survey_id && column.config.question_id) {
             const questionList = this.props.elementsBySurvey[column.config.survey_id];
             const selectedQuestionItem = questionList.items
                 .find(item => item.data.id == column.config.question_id);
-
+            column.shouldShowButton = true;
             column.title = selectedQuestionItem.data.question.question;
         }
 
