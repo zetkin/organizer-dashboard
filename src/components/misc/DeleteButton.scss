@@ -1,3 +1,18 @@
 .DeleteButton {
+    font-size: 1.25em;
+}
+
+.DeleteButton-confirm {
     @include button($color: $c-brand-delete, $icon: $fa-var-trash);
+    font-size: 1em;
+    padding: 0.05em 1em 0.05em 0.5em;
+    margin-left: 0.8em;
+    margin-right: 0.8em;
+}
+
+.DeleteButton-delete {
+    text-decoration: underline;
+}
+.DeleteButton-cancel {
+    text-decoration: underline;
 }

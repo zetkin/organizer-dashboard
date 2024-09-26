@@ -25,6 +25,9 @@ campaignSelect:
     nullLabel: Alla kampanjer
 deleteButton:
     label: Radera
+    confirm: Bekräfta
+    cancel: Avbryt
+    confirmPrompt: Är du säker?
 infoList:
     andMore: ' och { number } fler'
 inviteBox:

@@ -24,6 +24,9 @@ campaignSelect:
     nullLabel: All campaigns
 deleteButton:
     label: Delete
+    confirm: Confirm
+    cancel: Cancel
+    confirmPrompt: Are you sure?
 infoList:
     andMore: ' and { number } more'
 inviteBox:
