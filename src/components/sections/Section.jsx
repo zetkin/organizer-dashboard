@@ -39,10 +39,12 @@ export default class Section extends React.Component {
 
     componentDidMount() {
         this.runPaneManager();
+        window.addEventListener('keydown', this.onKeyDown.bind(this))
     }
 
     componentWillUnmount() {
         PaneManager.stop();
+        window.removeEventListener('keydown', this.onKeyDown.bind(this));
     }
 
     componentDidUpdate(prevProps) {
@@ -209,5 +211,21 @@ export default class Section extends React.Component {
 
     onPushPane(paneType, params) {
         this.props.dispatch(pushPane(paneType, params));
+    }
+
+    onKeyDown(ev) {
+        if (ev.keyCode === 27 && this.props.panes.length !== 0) {
+            const tagName = ev.target.tagName.toLowerCase();
+
+            if (tagName === 'input'
+                || tagName === 'textarea'
+                || tagName === 'select'
+                || ev.target.contentEditable === 'true') {
+                return;
+            }
+            else {
+                this.onClosePane(this.props.panes.length - 1);
+            }
+        }
     }
 }

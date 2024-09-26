@@ -205,6 +205,7 @@ export default class RelSelectInput extends InputBase {
     }
 
     onKeyDown(ev) {
+        ev.stopPropagation();
         const focusedIndex = this.state.focusedIndex;
         const objects = this.getFilteredObjects();
         const valueCount = this.values.length;
