@@ -5,6 +5,30 @@
         }
     }
 
+    .ActionReminderPane-reminderContent {
+        border-bottom: 1px solid darken($c-ui-bg, 10);
+        color: lighten($c-text, 40);
+        list-style: disc;
+        padding-left: 1em;
+        padding-bottom: 2em;
+
+        li {
+            margin-left: .5em;
+            font-size: 1.4em;
+
+            @include small-screen {
+                font-size: 1.2em;
+            }
+
+            span {
+                font-style: italic;
+            }
+        }
+        .ActionReminderPane-editableItem {
+            cursor: pointer;
+        }
+    }
+
     .ActionReminderPane-newParticipants {
         li {
             float: left;

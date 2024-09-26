@@ -26,11 +26,6 @@ export default class ActionReminderPane extends PaneBase {
             { id: 'panes.actionReminder.title' });
     }
 
-    getPaneSubTitle(data) {
-        return (data.actionItem && !data.actionItem.isPending)?
-            <Action action={ data.actionItem.data }/> : null;
-    }
-
     componentDidMount() {
         let actionId = this.getParam(0);
         this.props.dispatch(retrieveActionParticipants(actionId));
@@ -50,6 +45,40 @@ export default class ActionReminderPane extends PaneBase {
     }
 
     renderPaneContent(data) {
+        let reminderContent = null;
+
+        const editableListItems = [
+            'activity',
+            'campaign',
+            'location'
+        ];
+
+        if (data.actionItem && !data.actionItem.isPending) {
+            reminderContent = [
+                <Msg key="h" tagName="p"
+                    id="panes.actionReminder.content.h"/>,
+                <ul key="reminderContent" className="ActionReminderPane-reminderContent">
+                    <Msg key="infoAction" tagName="li"
+                        id="panes.actionReminder.content.infoAction"/>
+                    { editableListItems.map(item => {
+                        return (
+                            <li key={ item }
+                                onClick={ this.onEditReminderContent.bind(this, item, data.actionItem.data[item].id)}
+                                className="ActionReminderPane-editableItem">
+                                { this.props.intl.formatMessage({ id: 'panes.actionReminder.content.li' }, {
+                                    content: data.actionItem.data[item].title,
+                                }) }
+                                <Msg key="clickToEdit" tagName="span"
+                                    id="panes.actionReminder.content.clickToEdit"/>
+                            </li>
+                        )
+                    })}
+                    <Msg key="infoZetkin" tagName="li"
+                        id="panes.actionReminder.content.infoZetkin"/>
+                </ul>,
+            ];
+        }
+
         var reminderForm = null;
         if (data.newParticipants.length) {
             reminderForm = [
@@ -115,6 +144,7 @@ export default class ActionReminderPane extends PaneBase {
         }
 
         return [
+            reminderContent,
             reminderForm,
             remindedList
         ];
@@ -142,5 +172,9 @@ export default class ActionReminderPane extends PaneBase {
 
     onPersonClick(person) {
         this.openPane('person', person.id);
+    }
+
+    onEditReminderContent(field, id) {
+        this.openPane('edit' + field, id);
     }
 }

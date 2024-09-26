@@ -4,3 +4,9 @@ saveButton: Send
 title: Action reminders
 toBeReminded:
     h: Participants to be reminded
+content:
+    h: 'Content that will be included:'
+    infoAction: Action info and contact information
+    li: 'Information about: "{ content }", '
+    clickToEdit: Click to edit
+    infoZetkin: Generic information about Zetkin
