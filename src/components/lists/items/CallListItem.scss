@@ -17,10 +17,6 @@
     .CallListItem-content {
         @include col(11,12);
         padding: 1em;
-
-        @include medium-screen {
-            @include col(12,12);
-        }
     }
 
     .CallListItem-target {
@@ -107,6 +103,38 @@
                 @include icon($fa-var-phone);
             }
         }
+
+        .CallListItem-organizerMsg {
+            @include col(12,12, $align:middle, $first:true);
+            display: flex;
+            align-items: baseline;
+
+            @include small-screen {
+                margin-top: 0.5em;
+                padding: 0;
+            }
+
+            &:before {
+                @include icon($fa-var-sticky-note-o);
+                min-width: 1.6em;
+            }
+
+            &.loading {
+                &::after {
+                    display: inline-block;
+                    animation: CallListItem-organizerMsg-loadingAnimation steps(1, end) 1s infinite;
+                    content: '.';
+                }
+            }
+
+            &.empty {
+                span {
+                    font-size: inherit;
+                    font-style: italic;
+                    color: #666666;
+                }
+            }
+        }
     }
 
     .CallListItem-action {
@@ -184,4 +212,11 @@
             }
         }
     }
+}
+
+@keyframes CallListItem-organizerMsg-loadingAnimation {
+    0%   { content: '.'; }
+    33%  { content: '..'; }
+    66%  { content: '...'; }
+    99%  { content: '.'; }
 }

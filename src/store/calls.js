@@ -39,9 +39,11 @@ export default function calls(state = null, action) {
             });
 
         case types.RETRIEVE_CALL + '_PENDING':
+            const messageIsPending = action.meta.retrieveMessage;
+
             return Object.assign({
                 callList: updateOrAddListItem(state.callList,
-                    action.meta.id, null, { isPending: true }),
+                    action.meta.id, null, { isPending: !messageIsPending }),
             });
 
         case types.RETRIEVE_CALL + '_FULFILLED':

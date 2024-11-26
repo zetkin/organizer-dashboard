@@ -9,3 +9,5 @@ item:
         allocated: On-going...
         notReached: Not reached
         reached: Reached
+    organizerMsg:
+        noMessage: Caller did not leave a message

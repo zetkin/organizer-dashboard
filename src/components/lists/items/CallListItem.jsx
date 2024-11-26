@@ -1,15 +1,30 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import cx from 'classnames';
 import { FormattedMessage as Msg } from 'react-intl';
+import { retrieveCall } from '../../../actions/call';
 
 import Avatar from '../../misc/Avatar';
 
-
+@connect()
 export default class CallListItem extends React.Component {
     static propTypes = {
         onItemClick: React.PropTypes.func.isRequired,
         data: React.PropTypes.object,
     };
+
+    componentDidUpdate(prevProps) {
+        const call = this.props.data;
+
+        if (this.props.inView && !prevProps.inView) {
+            if (!call || call.message_to_organizer !== undefined) {
+                return;
+            }
+            else if (call.organizer_action_needed) {
+                this.props.dispatch(retrieveCall(call.id, true));
+            }
+        }
+    }
 
     render() {
         let call = this.props.data;
@@ -19,6 +34,7 @@ export default class CallListItem extends React.Component {
         let stateClass = "CallListItem-state";
         let stateLabel = null;
         let actionStatus = null;
+        let organizerMessage = null;
 
         switch (call.state) {
             case 0:
@@ -41,7 +57,34 @@ export default class CallListItem extends React.Component {
             actionStatus = "needed";
         }
 
-         let actionClassNames  = cx('CallListItem-action', actionStatus );
+        if (actionStatus) {
+            const messageClassNames = cx('CallListItem-organizerMsg', {
+                loading: call.message_to_organizer === undefined,
+                empty: call.message_to_organizer === null,
+            });
+
+            let messageContent = null;
+
+            if (call.message_to_organizer === null) {
+                messageContent = (
+                    <Msg tagName="span"
+                        id="lists.callList.item.organizerMsg.noMessage"/>
+                );
+            }
+            else if (call.message_to_organizer && call.message_to_organizer.length > 180) {
+                messageContent = call.message_to_organizer.substr(0, 180) + '...';
+            }
+            else {
+                messageContent = call.message_to_organizer;
+            }
+
+            organizerMessage = (
+                <span className={ messageClassNames }>
+                    { messageContent }</span>
+            );
+        }
+
+        let actionClassNames  = cx('CallListItem-action', actionStatus );
 
         return (
             <div className="CallListItem"
@@ -66,6 +109,7 @@ export default class CallListItem extends React.Component {
                         </span>
                         <span className="CallListItem-caller">
                             { call.caller.name }</span>
+                        { organizerMessage }
                     </div>
                     <div className="CallListItem-callStatuses"/>
                     <div className="CallListItem-organizerStatuses"/>

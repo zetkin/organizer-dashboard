@@ -31,13 +31,13 @@ export function retrieveCalls(page = 0, filters = {}) {
     };
 }
 
-export function retrieveCall(id) {
+export function retrieveCall(id, retrieveMessage = false) {
     return ({ dispatch, getState, z }) => {
         let orgId = getState().org.activeId;
 
         dispatch({
             type: types.RETRIEVE_CALL,
-            meta: { id },
+            meta: { id, retrieveMessage },
             payload: {
                 promise: z.resource('orgs', orgId, 'calls', id).get()
             }

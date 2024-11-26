@@ -9,3 +9,5 @@ item:
         allocated: Pågår...
         notReached: Nåddes inte
         reached: Nåddes
+    organizerMsg:
+        noMessage: Ringaren lämnade inget meddelande
